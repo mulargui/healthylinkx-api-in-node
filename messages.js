@@ -30,7 +30,7 @@ function providers(request, response) {
 	var specialty=params.specialty;
 	var distance=params.distance;
 
- 	var zipcodes = NULL;
+ 	var zipcodes;
  	
  	//check params
  	if(!zipcode && !lastname1 && !specialty){
