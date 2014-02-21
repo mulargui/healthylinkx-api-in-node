@@ -1,8 +1,6 @@
 var mysql=require("mysql");
 var url = require("url");
 
-// en github
-
 var db=mysql.createConnection({
 	host:'awsdb.cpcqc8qelwdl.us-west-2.rds.amazonaws.com',
 	user:'awsdb',
