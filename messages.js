@@ -43,7 +43,7 @@ function providers(request, response) {
  	//in case we need to find zipcodes at a distance
  	if (!distance && !zipcode){
  		//lets get a few zipcodes
- 		var queryapi = 'http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/'+zipcode+'/'+distance'/mile';
+ 		var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
   	}
 
  	//building the query string
