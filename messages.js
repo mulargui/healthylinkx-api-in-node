@@ -47,8 +47,7 @@ function providers(request, response) {
   	}
 
  	//building the query string
- 	var query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City
- 		FROM npidata2 WHERE (";
+ 	var query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street,Provider_Full_City FROM npidata2 WHERE (";
  	if(lastname1)
  		query += "((Provider_Last_Name_Legal_Name = '" + lastname1 + "')";
  	if(lastname2)
