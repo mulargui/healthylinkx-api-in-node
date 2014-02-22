@@ -75,7 +75,7 @@ function providers(request, response) {
 		});
 
   		if (!responsestring) {	
-			response.writeHead(204, {"Content-Type": "text/plain"}); 
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
 			response.write('error on zipcodedistanceapi');
 			response.end();
 			return;
