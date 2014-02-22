@@ -22,14 +22,13 @@ function taxonomy(request, response) {
 function providers(request, response) {
 	var params = url.parse(request.url,true).query; 
 
-	var zipcode=params.zipcode;
 	var gender=params.gender;
 	var lastname1=params.lastname1;
 	var lastname2=params.lastname2;
 	var lastname3=params.lastname3;
 	var specialty=params.specialty;
 	var distance=params.distance;
-
+	var zipcode=params.zipcode;
  	var zipcodes;
  	
  	//check params
@@ -41,7 +40,7 @@ function providers(request, response) {
  	}
 
  	//in case we need to find zipcodes at a distance
- 	if (!distance && !zipcode){
+ 	if (distance && zipcode){
  		//lets get a few zipcodes
  		var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
   	}
@@ -77,7 +76,7 @@ function providers(request, response) {
  		else
  			query += zipcodes;
  	query += ") limit 50";
- /*	
+ 	
  	db.query(query, function(err,results,fields){		
 		if (err){
 			throw err;
@@ -86,10 +85,6 @@ function providers(request, response) {
 		response.write(JSON.stringify(results));
 		response.end();
 	});
-*/
-	response.writeHead(200, {"Content-Type": "text/plain"}); 
-	response.write(query);
-	response.end();
 }
 
 function shortlist(request, response) {
