@@ -51,7 +51,7 @@ function providers(request, response) {
   			path: queryapi,
   			//method: 'POST'
 		};
-/*
+
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
@@ -64,7 +64,7 @@ function providers(request, response) {
 			});
 
 		});
-
+/*
 		req.end();		
 
 		req.on('end', function() {
