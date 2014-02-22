@@ -47,7 +47,7 @@ function providers(request, response) {
 		var responsestring;
 
 		var options = {
-  			host: "http://zipcodedistanceapi.redline13.com",
+  			host: "zipcodedistanceapi.redline13.com",
   			path: queryapi,
   			//method: 'POST'
 		};
