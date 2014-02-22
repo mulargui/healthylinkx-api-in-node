@@ -62,24 +62,25 @@ function providers(request, response) {
 			res.on('error', function(e) {
 				throw e;
 			});
-
-		});
-
-		req.end();		
-
-		req.on('end', function() {
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-			response.write(responsestring);
-			response.end();
-			return;
-		});
+			
+			res.on('end', function() {
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write(responsestring);
+				response.end();
+				return;
+			});
+		}).end();		
 
   		if (!responsestring) {	
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.writeHead(204, {"Content-Type": "text/plain"}); 
 			response.write('error on zipcodedistanceapi');
 			response.end();
 			return;
  		}
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(responsestring);
+			response.end();
+			return;
 /*	
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
