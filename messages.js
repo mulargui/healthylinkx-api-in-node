@@ -63,7 +63,9 @@ function providers(request, response) {
 				throw e;
 			});
 
-		}).end();		
+		});
+
+		req.end();		
 
 		req.on('end', function() {
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
