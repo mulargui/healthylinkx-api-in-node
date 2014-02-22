@@ -65,7 +65,7 @@ function providers(request, response) {
 			
 			res.on('end', function() {
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write(responsestring);
+				response.write("----end---");
 				response.end();
 				return;
 			});
