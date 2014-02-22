@@ -42,12 +42,43 @@ function providers(request, response) {
  	//in case we need to find zipcodes at a distance
  	if (distance && zipcode){
  		//lets get a few zipcodes
- 		var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
-		// for DEBUG
- 		//$responsestring = "{\"zip_codes\":[{\"zip_code\":\"98052\",\"distance\":4.54},{\"zip_code\":\"98007\",\"distance\":4.247},{\"zip_code\":\"98034\",\"distance\":4.626}]}";
- 		if (!$responsestring)	
- 			$this->response('error on zipcodedistanceapi',204); // "No Content" status
- 	
+ 		//var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
+ 		var queryapi = "/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
+		var responsestring;
+
+		var options = {
+  			host: "http://zipcodedistanceapi.redline13.com",
+  			path: queryapi,
+  			//method: 'POST'
+		};
+
+		var req = require("http").request(options, function(res) {
+			res.setEncoding('utf8');
+			res.on('data', function (chunk) {
+				responsestring += chunk;
+
+			});
+
+			res.on('error', function(e) {
+				throw e;
+			});
+
+		}).end();		
+
+		req.on('end', function() {
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(responsestring);
+			response.end();
+			return;
+		});
+
+  		if (!responsestring)	
+			response.writeHead(204, {"Content-Type": "text/plain"}); 
+			response.write('error on zipcodedistanceapi');
+			response.end();
+			return;
+ 		}
+/* 	
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
  		if (!$responsejson)	
@@ -59,8 +90,7 @@ function providers(request, response) {
  		for ($i = 1; $i<$count; $i++)
  			$zipcodes .= " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
  		$zipcodes .= ")";
-
-
+*/
   	}
 
  	//building the query string
