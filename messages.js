@@ -38,7 +38,7 @@ function providers(request, response) {
 		response.end();
 		return;
  	}
-/*
+
  	//in case we need to find zipcodes at a distance
  	if (distance && zipcode){
  		//lets get a few zipcodes
@@ -51,7 +51,7 @@ function providers(request, response) {
   			path: queryapi,
   			//method: 'POST'
 		};
-
+/*
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
@@ -92,8 +92,9 @@ function providers(request, response) {
  		for ($i = 1; $i<$count; $i++)
  			$zipcodes .= " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
  		$zipcodes .= ")";
-  	}
 */
+  	}
+
  	//building the query string
  	var query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street,Provider_Full_City FROM npidata2 WHERE (";
  	if(lastname1)
