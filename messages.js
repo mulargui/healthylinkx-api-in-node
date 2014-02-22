@@ -43,6 +43,24 @@ function providers(request, response) {
  	if (distance && zipcode){
  		//lets get a few zipcodes
  		var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
+		// for DEBUG
+ 		//$responsestring = "{\"zip_codes\":[{\"zip_code\":\"98052\",\"distance\":4.54},{\"zip_code\":\"98007\",\"distance\":4.247},{\"zip_code\":\"98034\",\"distance\":4.626}]}";
+ 		if (!$responsestring)	
+ 			$this->response('error on zipcodedistanceapi',204); // "No Content" status
+ 	
+ 		//translate json from string to array
+ 		$responsejson = json_decode($responsestring,true);
+ 		if (!$responsejson)	
+ 			$this->response('unable to decode json',204); // "No Content" status
+ 	
+ 		//lets prep a where condition for zip codes
+ 		$count=count($responsejson['zip_codes']);
+ 		$zipcodes = "((Provider_Short_Postal_Code = '{$responsejson['zip_codes'][0]['zip_code']}')";
+ 		for ($i = 1; $i<$count; $i++)
+ 			$zipcodes .= " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
+ 		$zipcodes .= ")";
+
+
   	}
 
  	//building the query string
