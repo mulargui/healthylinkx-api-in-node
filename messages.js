@@ -64,7 +64,7 @@ function providers(request, response) {
 			});
 
 		});
-/*
+
 		req.end();		
 
 		req.on('end', function() {
@@ -74,13 +74,13 @@ function providers(request, response) {
 			return;
 		});
 
-  		if (!responsestring)	
+  		if (!responsestring) {	
 			response.writeHead(204, {"Content-Type": "text/plain"}); 
 			response.write('error on zipcodedistanceapi');
 			response.end();
 			return;
  		}
-	
+/*	
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
  		if (!$responsejson)	
