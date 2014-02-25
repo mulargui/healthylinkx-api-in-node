@@ -149,7 +149,7 @@ function transaction(request, response) {
  
  	//check params
  	if(!id){
-		response.writeHead(204, {"Content-Type": "text/plain"}); 
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
 		response.write('no ID');
 		response.end();
 		return;
@@ -163,7 +163,7 @@ function transaction(request, response) {
 		}
 
 		if (results.length <= 0){
-			response.writeHead(204, {"Content-Type": "text/plain"}); 
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
 			response.write('no ID records');
 			response.end();
 			return;
@@ -174,9 +174,9 @@ function transaction(request, response) {
 			response.end();
 			return;
 		//get the providers
-		var npi1 = rows[0].NPI1;
-		var npi2 = rows[0].NPI2;
-		var npi3 = rows[0].NPI3;
+		var npi1 = results[0].NPI1;
+		var npi2 = results[0].NPI2;
+		var npi3 = results[0].NPI3;
 	
 		//get the details of the providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
