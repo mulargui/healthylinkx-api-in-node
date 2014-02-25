@@ -56,7 +56,11 @@ function providers(request, response) {
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
-				responsestring += chunk;
+				//responsestring += chunk;
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write("----data---");
+				response.end();
+				return;
 
 			});
 
