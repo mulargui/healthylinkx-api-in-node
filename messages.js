@@ -49,10 +49,10 @@ function providers(request, response) {
 
 		var options = {
   			host: "zipcodedistanceapi.redline13.com",
-  			path: queryapi,
+  			path: queryapi
   			//method: 'POST'
 		};
-/*
+
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
@@ -82,7 +82,7 @@ function providers(request, response) {
 			response.write(responsestring);
 			response.end();
 			return;
-	
+/*	
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
  		if (!$responsejson)	
