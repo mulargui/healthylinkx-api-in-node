@@ -164,6 +164,7 @@ function transaction(request, response) {
 		response.writeHead(200, {"Content-Type": "text/plain"}); 
 		response.write(JSON.stringify(results));
 		response.end();
+		return;
 /*
 		if(mysql_num_rows($sql) <= 0)
 			$this->response('no ID record',204); // If no records "No Content" status
