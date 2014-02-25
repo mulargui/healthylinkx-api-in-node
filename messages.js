@@ -1,11 +1,19 @@
 var mysql=require("mysql");
 var url = require("url");
+var constants = require("./constants.js");
 
+/*
 var db=mysql.createConnection({
-	host:'awsdb.cpcqc8qelwdl.us-west-2.rds.amazonaws.com',
-	user:'awsdb',
-	password:'awsawsdb',
-	database:'healthylinkx'
+	host:constants.host, //'awsdb.cpcqc8qelwdl.us-west-2.rds.amazonaws.com',
+	user:constants.user, //'awsdb',
+	password:constants.password, //'awsawsdb',
+	database:constants.database //'healthylinkx'
+});*/
+var db=mysql.createConnection({
+	host:constants.host,
+	user:constants.user,
+	password:constants.password,
+	database:constants.database
 });
 
 function taxonomy(request, response) {
