@@ -149,7 +149,7 @@ function transaction(request, response) {
  
  	//check params
  	if(!id){
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.writeHead(204, {"Content-Type": "text/plain"}); 
 		response.write('no ID');
 		response.end();
 		return;
@@ -163,16 +163,12 @@ function transaction(request, response) {
 		}
 
 		if (results.length <= 0){
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.writeHead(204, {"Content-Type": "text/plain"}); 
 			response.write('no ID records');
 			response.end();
 			return;
  		}
 
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-			response.write(JSON.stringify(results));
-			response.end();
-			return;
 		//get the providers
 		var npi1 = results[0].NPI1;
 		var npi2 = results[0].NPI2;
@@ -186,6 +182,10 @@ function transaction(request, response) {
 			query += "OR (NPI = '"+npi3+"')";
 		query += ")";
 	
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(query);
+			response.end();
+			return;
  		db.query(query, function(err,results,fields){		
 			if (err){
 				throw err;
