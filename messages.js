@@ -194,10 +194,50 @@ function transaction(request, response) {
 }
 
 function shortlist(request, response) {
-	response.writeHead(200, {"Content-Type": "text/plain"}); 
-	response.write("shortlist");
-	response.end();
+	var params = url.parse(request.url,true).query; 
+	var npi1 = params.NPI1;
+	var npi2 = params.NPI2;
+	var npi3 = params.NPI3;
+
+ 
+ 	//check params
+ 	if(!npi1){
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.write('no NPI');
+		response.end();
+		return;
+ 	}
+	
+	//save the selection
+	var query = "INSERT INTO transactions VALUES (DEFAULT,DEFAULT,'"+ npi1 +"','"+ npi2 +"','"+npi3 +"')";
+ 	db.query(query, function(err,results,fields){		
+		if (err){
+			throw err;
+		}
+
+		//return the transaction ID
+		//$result = array();
+		//$result["transaction"] = mysql_insert_id();
+			
+		//return detailed data of the selected providers
+		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
+		if(npi2)
+			query += "OR (NPI = '"+npi2+"')";
+		if(npi3)
+			query += "OR (NPI = '"+npi3+"')";
+		query += ")";
+
+ 		db.query(query, function(err,results,fields){		
+			if (err){
+				throw err;
+			}
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(JSON.stringify(results));
+			response.end();
+		});
+	});
 }
+
 exports.taxonomy=taxonomy;
 exports.providers=providers;
 exports.shortlist=shortlist;
