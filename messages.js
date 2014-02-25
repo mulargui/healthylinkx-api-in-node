@@ -216,7 +216,7 @@ function shortlist(request, response) {
 		}
 
 		//var id=[{transaction: results[0].insertId}];
-		var id= JSON.stringify(results[0].insertId);
+		var id= JSON.stringify(results.insertId);
 
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
 
