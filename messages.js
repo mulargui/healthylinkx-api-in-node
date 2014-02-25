@@ -144,6 +144,10 @@ function providers(request, response) {
 }
 
 function transaction(request, response) {
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.write('transaction');
+		response.end();
+		return;
 	var params = url.parse(request.url,true).query; 
 	var id=params.id;
  	
