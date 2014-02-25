@@ -202,7 +202,7 @@ function shortlist(request, response) {
  
  	//check params
  	if(!npi1){
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.writeHead(204, {"Content-Type": "text/plain"}); 
 		response.write('no NPI');
 		response.end();
 		return;
@@ -215,6 +215,10 @@ function shortlist(request, response) {
 			throw err;
 		}
 
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(JSON.stringify(results));
+			response.end();
+			return;
 		//return the transaction ID
 		//$result = array();
 		//$result["transaction"] = mysql_insert_id();
