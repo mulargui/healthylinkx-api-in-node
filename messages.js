@@ -216,12 +216,12 @@ function shortlist(request, response) {
 		}
 
 		//var id=[{transaction: results[0].insertId}];
-		var id= results[0].insertId;
+		var id= JSON.stringify(results[0].insertId);
 
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
 
 			//return the transaction ID
-			response.write(JSON.stringify(id));
+			response.write(id);
 
 			//return detailed data of the selected providers
 			response.write(JSON.stringify(results));
