@@ -147,18 +147,19 @@ function transaction(request, response) {
 	var params = url.parse(request.url,true).query; 
 	var id=params.id;
  	
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.write('-----'+id+'----');
+		response.end();
+		return;
+
  	//check params
  	if(!id){
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.writeHead(204, {"Content-Type": "text/plain"}); 
 		response.write('no ID');
 		response.end();
 		return;
  	}
 
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
-		response.write('-----'+id+'----');
-		response.end();
-		return;
 	//retrieve the providers
 	var query = "SELECT * FROM transactions WHERE (id = '"+id+"')";
  	db.query(query, function(err,results,fields){		
