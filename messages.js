@@ -53,6 +53,11 @@ function providers(request, response) {
   			//method: 'POST'
 		};
 
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write("going to query:"+ queryapi);
+				response.end();
+				return;
+
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
