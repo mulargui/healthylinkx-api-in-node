@@ -50,12 +50,12 @@ function providers(request, response) {
 		var options = {
   			host: "zipcodedistanceapi.redline13.com",
   			path: queryapi
-  			//method: 'POST'
-		};
+ 		};
+ 			//method: 'POST'
 
  		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
   		zipcodes += ")";
-/*
+
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
@@ -67,16 +67,17 @@ function providers(request, response) {
 				throw e;
 			});
 			
-			res.on('end', function() {
+		});		
+
+			req.on('end', function() {
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
 				response.write("----end---");
 				response.end();
 				return;
 			});
-		}).end();		
 
   		if (!responsestring) {	
-			response.writeHead(204, {"Content-Type": "text/plain"}); 
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
 			response.write('error on zipcodedistanceapi');
 			response.end();
 			return;
@@ -84,8 +85,10 @@ function providers(request, response) {
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
 			response.write(responsestring);
 			response.end();
+		req.end();
 			return;
-	
+
+/*
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
  		if (!$responsejson)	
@@ -215,7 +218,7 @@ function shortlist(request, response) {
 			throw err;
 		}
 
-		var id=[{transaction: results.insertId}];
+		var reply=[{transaction: results.insertId}];
 			
 		//return detailed data of the selected providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
@@ -230,16 +233,10 @@ function shortlist(request, response) {
 				throw err;
 			}
 			
-			id.push(results);
+			reply.push(results);
 			
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
-
-			//return the transaction ID
-			response.write(JSON.stringify(id));
-
-			//return detailed data of the selected providers
-			//response.write(JSON.stringify(results));
-
+			response.write(JSON.stringify(reply));
 			response.end();
 		});
 	});
