@@ -40,7 +40,7 @@ function providers(request, response) {
 		return;
  	}
 
-		response.writeHead(204, {"Content-Type": "text/plain"}); 
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
 		response.write('parameters: '+ distance +"#"+zipcode);
 		response.end();
 		return;
