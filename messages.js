@@ -168,7 +168,11 @@ function transaction(request, response) {
 			response.end();
 			return;
  		}
-	
+
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(JSON.stringify(results));
+			response.end();
+			return;
 		//get the providers
 		var npi1 = rows[0].NPI1;
 		var npi2 = rows[0].NPI2;
