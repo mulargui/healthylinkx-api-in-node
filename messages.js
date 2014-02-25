@@ -144,21 +144,21 @@ function providers(request, response) {
 }
 
 function transaction(request, response) {
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
-		response.write('-----transaction----');
-		response.end();
-		return;
 	var params = url.parse(request.url,true).query; 
 	var id=params.id;
  	
  	//check params
  	if(!id){
-		response.writeHead(204, {"Content-Type": "text/plain"}); 
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
 		response.write('no ID');
 		response.end();
 		return;
  	}
 
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.write('-----'+id+'----');
+		response.end();
+		return;
 	//retrieve the providers
 	var query = "SELECT * FROM transactions WHERE (id = '"+id+"')";
  	db.query(query, function(err,results,fields){		
