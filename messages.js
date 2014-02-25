@@ -216,18 +216,6 @@ function shortlist(request, response) {
 		}
 
 		var id=[{transaction: results.insertId}];
-		//var id= JSON.stringify(results.insertId);
-
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-
-			//return the transaction ID
-			//response.write(id);
-
-			//return detailed data of the selected providers
-			response.write(JSON.stringify(id));
-
-			response.end();
-			return;
 			
 		//return detailed data of the selected providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
