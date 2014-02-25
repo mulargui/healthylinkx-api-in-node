@@ -40,6 +40,11 @@ function providers(request, response) {
 		return;
  	}
 
+		response.writeHead(204, {"Content-Type": "text/plain"}); 
+		response.write('parameters: '+ distance +"#"+zipcode);
+		response.end();
+		return;
+
  	//in case we need to find zipcodes at a distance
  	if (distance && zipcode){
  		//lets get a few zipcodes
