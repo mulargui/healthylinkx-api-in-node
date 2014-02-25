@@ -181,11 +181,7 @@ function transaction(request, response) {
 		if(npi3)
 			query += "OR (NPI = '"+npi3+"')";
 		query += ")";
-	
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-			response.write(query);
-			response.end();
-			return;
+
  		db.query(query, function(err,results,fields){		
 			if (err){
 				throw err;
