@@ -215,11 +215,6 @@ function shortlist(request, response) {
 			throw err;
 		}
 
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-			response.write(JSON.stringify(results));
-			response.end();
-			return;
-
 		var id=[{transaction: results[0].insertId}];
 			
 		//return detailed data of the selected providers
