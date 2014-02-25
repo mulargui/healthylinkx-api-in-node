@@ -154,7 +154,7 @@ function transaction(request, response) {
 		response.end();
 		return;
  	}
-
+/*
 	//retrieve the providers
 	var query = "SELECT * FROM transactions WHERE (id = '"+id+"')";
  	db.query(query, function(err,results,fields){		
@@ -165,7 +165,7 @@ function transaction(request, response) {
 		response.write(JSON.stringify(results));
 		response.end();
 		return;
-/*
+
 		if(mysql_num_rows($sql) <= 0)
 			$this->response('no ID record',204); // If no records "No Content" status
 	
@@ -175,7 +175,7 @@ function transaction(request, response) {
 		var npi1 = $rlt["NPI1"];
 		var npi2 = $rlt["NPI1"];
 		var npi3 = $rlt["NPI2"];
-*/	
+	
 		//get the details of the providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
 		if(npi2)
@@ -192,7 +192,7 @@ function transaction(request, response) {
 			response.write(JSON.stringify(results));
 			response.end();
 		});
-	});
+	});*/
 }
 
 function shortlist(request, response) {
