@@ -220,7 +220,7 @@ function shortlist(request, response) {
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
 
 			//return the transaction ID
-			response.write(results[0].insertId);
+			response.write(results.insertId);
 
 			//return detailed data of the selected providers
 			response.write(JSON.stringify(results));
