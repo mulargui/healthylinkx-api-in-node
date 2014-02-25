@@ -219,9 +219,8 @@ function shortlist(request, response) {
 			response.write(JSON.stringify(results));
 			response.end();
 			return;
-		//return the transaction ID
-		//$result = array();
-		//$result["transaction"] = mysql_insert_id();
+
+		var id=[{transaction: results[0].insertId}];
 			
 		//return detailed data of the selected providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
@@ -235,8 +234,15 @@ function shortlist(request, response) {
 			if (err){
 				throw err;
 			}
+			
 			response.writeHead(200, {"Content-Type": "text/plain"}); 
+
+			//return the transaction ID
+			response.write(JSON.stringify(id));
+
+			//return detailed data of the selected providers
 			response.write(JSON.stringify(results));
+
 			response.end();
 		});
 	});
