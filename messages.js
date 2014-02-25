@@ -161,21 +161,19 @@ function transaction(request, response) {
 		if (err){
 			throw err;
 		}
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
-		response.write(JSON.stringify(results));
-		response.end();
-		return;
-/*
-		if(mysql_num_rows($sql) <= 0)
-			$this->response('no ID record',204); // If no records "No Content" status
-	
-		$rlt = mysql_fetch_array($sql,MYSQL_ASSOC);
+
+		if (results.length <= 0){
+			response.writeHead(204, {"Content-Type": "text/plain"}); 
+			response.write('no ID records');
+			response.end();
+			return;
+ 		}
 	
 		//get the providers
-		var npi1 = $rlt["NPI1"];
-		var npi2 = $rlt["NPI1"];
-		var npi3 = $rlt["NPI2"];
-*/	
+		var npi1 = rows[0].NPI1;
+		var npi2 = rows[0].NPI2;
+		var npi3 = rows[0].NPI3;
+	
 		//get the details of the providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
 		if(npi2)
