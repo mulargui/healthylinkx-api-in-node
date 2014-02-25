@@ -53,14 +53,15 @@ function providers(request, response) {
   			//method: 'POST'
 		};
 
+ 		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
+  		zipcodes += ")";
+		
+		break;
+
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
-				//responsestring += chunk;
-				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("----data---");
-				response.end();
-				return;
+				responsestring += chunk;
 
 			});
 
@@ -95,9 +96,10 @@ function providers(request, response) {
  		//lets prep a where condition for zip codes
  		$count=count($responsejson['zip_codes']);
  		$zipcodes = "((Provider_Short_Postal_Code = '{$responsejson['zip_codes'][0]['zip_code']}')";
+ 		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
  		for ($i = 1; $i<$count; $i++)
  			$zipcodes .= " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
- 		$zipcodes .= ")";
+  		zipcodes += ")";
 */
   	}
 
@@ -143,18 +145,62 @@ function providers(request, response) {
 	});
 }
 
+function transaction(request, response) {
+	var params = url.parse(request.url,true).query; 
+	var id=params.id;
+ 	
+ 	//check params
+ 	if(!id){
+		response.writeHead(204, {"Content-Type": "text/plain"}); 
+		response.write('no ID');
+		response.end();
+		return;
+ 	}
+
+	//retrieve the providers
+	var query = "SELECT * FROM transactions WHERE (id = '"+id+"')";
+ 	db.query(query, function(err,results,fields){		
+		if (err){
+			throw err;
+		}
+		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		response.write(JSON.stringify(results));
+		response.end();
+/*
+		if(mysql_num_rows($sql) <= 0)
+			$this->response('no ID record',204); // If no records "No Content" status
+	
+		$rlt = mysql_fetch_array($sql,MYSQL_ASSOC);
+	
+		//get the providers
+		var npi1 = $rlt["NPI1"];
+		var npi2 = $rlt["NPI1"];
+		var npi3 = $rlt["NPI2"];
+*/	
+		//get the details of the providers
+		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
+		if(npi2)
+			query += "OR (NPI = '"+npi2+"')";
+		if(npi3)
+			query += "OR (NPI = '"+npi3+"')";
+		query += ")";
+	
+ 		db.query(query, function(err,results,fields){		
+			if (err){
+				throw err;
+			}
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(JSON.stringify(results));
+			response.end();
+		});
+	});
+}
+
 function shortlist(request, response) {
 	response.writeHead(200, {"Content-Type": "text/plain"}); 
 	response.write("shortlist");
 	response.end();
 }
-
-function transaction(request, response) {
-	response.writeHead(200, {"Content-Type": "text/plain"}); 
-	response.write("transaction");
-	response.end();
-}
-
 exports.taxonomy=taxonomy;
 exports.providers=providers;
 exports.shortlist=shortlist;
