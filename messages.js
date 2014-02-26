@@ -81,7 +81,8 @@ function providers(request, response) {
 		 		//translate json from string to array
 				var responsejson = JSON.parse(responsestring);
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("length:"+responsejson.zipcodes.length+ "----");
+				//response.write("length:"+responsejson.zipcodes.length+ "----");
+				response.write("first:"+responsejson.zipcodes[0].zipcode+ "----");
 				response.write(JSON.stringify(responsejson));
 				response.end();
 /*
