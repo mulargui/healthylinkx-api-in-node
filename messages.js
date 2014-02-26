@@ -30,7 +30,6 @@ function providers(request, response) {
 	var specialty=params.specialty;
 	var distance=params.distance;
 	var zipcode=params.zipcode;
- 	var zipcodes;
  	
  	//check params
  	if(!zipcode && !lastname1 && !specialty){
@@ -124,8 +123,12 @@ function providers(request, response) {
 			for (var i=1; i<length;i++){
  				query += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
 			}
-  			zipcodes += ")) limit 50";
+  			query += ")) limit 50";
 		
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write(query);
+				response.end();
+				return;
 			db.query(query, function(err,results,fields){		
 				if (err){
 					throw err;
