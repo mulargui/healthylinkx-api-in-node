@@ -60,10 +60,6 @@ function providers(request, response) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
 				responsestring += chunk;
-				//response.writeHead(200, {"Content-Type": "text/plain"}); 
-				//response.write('received data'+responsestring);
-				//response.end();
-				//return;
 			});
 
 			res.on('error', function(e) {
@@ -80,11 +76,11 @@ function providers(request, response) {
 					response.end();
 					return;
  				}
+
+				var responsejson = JSON.parse(responsestring);
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("----end----"+responsestring);
+				response.write("----end----"+responsejson.stringify());
 				response.end();
-			});
-		}).end();		
 /*
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
@@ -102,6 +98,8 @@ function providers(request, response) {
  			zipcodes += " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
   		zipcodes += ")";
 */
+			});
+		}).end();		
   	}
 
 	//wait till the distance rest api responds
