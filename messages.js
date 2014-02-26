@@ -125,10 +125,6 @@ function providers(request, response) {
 			}
   			query += ")) limit 50";
 		
-				//response.writeHead(200, {"Content-Type": "text/plain"}); 
-				//response.write(query);
-				//response.end();
-				//return;
 			db.query(query, function(err,results,fields){		
 				if (err){
 					throw err;
