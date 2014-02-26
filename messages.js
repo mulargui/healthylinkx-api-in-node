@@ -81,7 +81,8 @@ function providers(request, response) {
 		 		//translate json from string to array
 				var responsejson = JSON.parse(responsestring);
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("----end----"+JSON.stringify(responsejson));
+				response.write("length:"+responsejson.zipcodes.length+ "----");
+				response.write(JSON.stringify(responsejson));
 				response.end();
 /*
  		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
