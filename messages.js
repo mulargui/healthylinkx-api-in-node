@@ -40,61 +40,6 @@ function providers(request, response) {
 		return;
  	}
 
- 	//in case we need to find zipcodes at a distance
-	var calculate_distance=0;
- 	if (distance && zipcode){
-
-		calculate_distance=1;
-
- 		//lets get a few zipcodes
- 		//var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
- 		var queryapi = "/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
-		var responsestring="";
-
-		var options = {
-  			host: "zipcodedistanceapi.redline13.com",
-  			path: queryapi
- 		};
-
-		var req = require("http").request(options, function(res) {
-			res.setEncoding('utf8');
-			res.on('data', function (chunk) {
-				responsestring += chunk;
-			});
-
-			res.on('error', function(e) {
-				throw e;
-			});
-			
-
-			res.on('end', function() {
-				calculate_distance=0;
-
-				//no data
-  				if (!responsestring) {	
-					response.writeHead(204, {"Content-Type": "text/plain"}); 
-					response.write('error on zipcodedistanceapi');
-					response.end();
-					return;
- 				}
-
-		 		//translate json from string to array
-				var responsejson = JSON.parse(responsestring);
-				var length=responsejson.zip_codes.length;
-
-				//built the zipcodes subquery
-		 		zipcodes = "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
-				for (var i=1; i<length;i++){
- 					zipcodes += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
-				}
-  				zipcodes += ")";
-			});
-		}).end();		
-  	}
-
-	//wait till the distance rest api responds
-	if (calculate_distance) return;
- 	
 	//building the query string
  	var query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street,Provider_Full_City FROM npidata2 WHERE (";
  	if(lastname1)
@@ -115,26 +60,82 @@ function providers(request, response) {
  			query += " AND (Classification = '" + specialty + "')";
  		else
  			query += "(Classification = '" + specialty + "')";
- 	if(zipcode && !distance)
- 		if(lastname1 || gender || specialty)
- 			query += " AND (Provider_Short_Postal_Code = '"+ zipcode + "')";
- 		else
- 			query += "(Provider_Short_Postal_Code = '" + zipcode + "')";
- 	if(zipcode && distance)
- 		if(lastname1 || gender || specialty)
- 			query += " AND " + zipcodes;
- 		else
- 			query += zipcodes;
- 	query += ") limit 50";
- 	
- 	db.query(query, function(err,results,fields){		
-		if (err){
-			throw err;
-		}
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
-		response.write(JSON.stringify(results));
-		response.end();
-	});
+
+ 	//case 1: no need to calculate zip codes at a distance
+ 	if (!distance || !zipcode){
+ 		if(zipcode)
+ 			if(lastname1 || gender || specialty)
+ 				query += " AND (Provider_Short_Postal_Code = '"+ zipcode + "')";
+ 			else
+ 				query += "(Provider_Short_Postal_Code = '" + zipcode + "')";
+		query += ") limit 50";
+ 		
+		db.query(query, function(err,results,fields){		
+			if (err){
+				throw err;
+			}
+			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.write(JSON.stringify(results));
+			response.end();
+		});
+		return;
+	}
+
+ 	//case 2:we need to find zipcodes at a distance
+
+ 	//lets get a few zipcodes
+ 	var queryapi = "/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
+	var responsestring="";
+
+	var options = {
+  		host: "zipcodedistanceapi.redline13.com",
+  		path: queryapi
+ 	};
+
+	var req = require("http").request(options, function(res) {
+		res.setEncoding('utf8');
+		res.on('data', function (chunk) {
+			responsestring += chunk;
+		});
+
+		res.on('error', function(e) {
+			throw e;
+		});	
+
+		res.on('end', function() {
+
+			//no data
+  			if (!responsestring) {	
+				response.writeHead(204, {"Content-Type": "text/plain"}); 
+				response.write('error on zipcodedistanceapi');
+				response.end();
+				return;
+ 			}
+
+		 	//translate json from string to array
+			var responsejson = JSON.parse(responsestring);
+			var length=responsejson.zip_codes.length;
+
+			//complete the query
+ 			if(lastname1 || gender || specialty)
+ 				query += " AND "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
+ 			else
+ 				query += "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
+			for (var i=1; i<length;i++){
+ 				query += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
+			}
+  			zipcodes += ")) limit 50";
+		
+			db.query(query, function(err,results,fields){		
+				if (err){
+					throw err;
+				}
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write(JSON.stringify(results));
+				response.end();
+			});
+		});
+	}).end();		
 }
 
 function transaction(request, response) {
