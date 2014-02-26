@@ -84,7 +84,7 @@ function providers(request, response) {
 
 				//built the zipcodes subquery
 		 		zipcodes = "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
-				for (var i=0; i<length;i++){
+				for (var i=1; i<length;i++){
  					zipcodes += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
 				}
   				zipcodes += ")";
