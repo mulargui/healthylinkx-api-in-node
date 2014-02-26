@@ -118,7 +118,7 @@ function providers(request, response) {
 
 			//complete the query
  			if(lastname1 || gender || specialty)
- 				query += " AND "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
+ 				query += " AND ((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
  			else
  				query += "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
 			for (var i=1; i<length;i++){
