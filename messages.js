@@ -55,19 +55,15 @@ function providers(request, response) {
   			host: "zipcodedistanceapi.redline13.com",
   			path: queryapi
  		};
- 			//method: 'POST'
-
- 		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
-  		zipcodes += ")";
 
 		var req = require("http").request(options, function(res) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
 				responsestring += chunk;
-				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write('received data'+responsestring);
-				response.end();
-				return;
+				//response.writeHead(200, {"Content-Type": "text/plain"}); 
+				//response.write('received data'+responsestring);
+				//response.end();
+				//return;
 			});
 
 			res.on('error', function(e) {
@@ -85,7 +81,7 @@ function providers(request, response) {
 					return;
  				}
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write(responsestring);
+				response.write("----end----"+responsestring);
 				response.end();
 			});
 		}).end();		
@@ -95,6 +91,9 @@ function providers(request, response) {
  		if (!$responsejson)	
  			$this->response('unable to decode json',204); // "No Content" status
  	
+ 		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
+  		zipcodes += ")";
+
  		//lets prep a where condition for zip codes
  		$count=count($responsejson['zip_codes']);
  		zipcodes = "((Provider_Short_Postal_Code = '{$responsejson['zip_codes'][0]['zip_code']}')";
