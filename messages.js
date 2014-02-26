@@ -41,7 +41,11 @@ function providers(request, response) {
  	}
 
  	//in case we need to find zipcodes at a distance
+	var calculate_distance=0;
  	if (distance && zipcode){
+
+		calculate_distance=1;
+
  		//lets get a few zipcodes
  		//var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
  		var queryapi = "/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
@@ -60,34 +64,31 @@ function providers(request, response) {
 			res.setEncoding('utf8');
 			res.on('data', function (chunk) {
 				responsestring += chunk;
-
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write('received data'+responsestring);
+				response.end();
+				return;
 			});
 
 			res.on('error', function(e) {
 				throw e;
 			});
 			
-		});		
 
-			req.on('end', function() {
+			res.on('end', function() {
+				calculate_distance=0;
+
+  				if (!responsestring) {	
+					response.writeHead(200, {"Content-Type": "text/plain"}); 
+					response.write('error on zipcodedistanceapi');
+					response.end();
+					return;
+ 				}
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("----end---");
+				response.write(responsestring);
 				response.end();
-				return;
 			});
-
-  		if (!responsestring) {	
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-			response.write('error on zipcodedistanceapi');
-			response.end();
-			return;
- 		}
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
-			response.write(responsestring);
-			response.end();
-		req.end();
-			return;
-
+		}).end();		
 /*
  		//translate json from string to array
  		$responsejson = json_decode($responsestring,true);
@@ -96,15 +97,18 @@ function providers(request, response) {
  	
  		//lets prep a where condition for zip codes
  		$count=count($responsejson['zip_codes']);
- 		$zipcodes = "((Provider_Short_Postal_Code = '{$responsejson['zip_codes'][0]['zip_code']}')";
+ 		zipcodes = "((Provider_Short_Postal_Code = '{$responsejson['zip_codes'][0]['zip_code']}')";
  		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
  		for ($i = 1; $i<$count; $i++)
- 			$zipcodes .= " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
+ 			zipcodes += " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
   		zipcodes += ")";
 */
   	}
 
- 	//building the query string
+	//wait till the distance rest api responds
+	if (calculate_distance) return;
+ 	
+	//building the query string
  	var query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street,Provider_Full_City FROM npidata2 WHERE (";
  	if(lastname1)
  		query += "((Provider_Last_Name_Legal_Name = '" + lastname1 + "')";
