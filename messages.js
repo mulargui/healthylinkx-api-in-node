@@ -72,7 +72,7 @@ function providers(request, response) {
 
 				//no data
   				if (!responsestring) {	
-					response.writeHead(200, {"Content-Type": "text/plain"}); 
+					response.writeHead(204, {"Content-Type": "text/plain"}); 
 					response.write('error on zipcodedistanceapi');
 					response.end();
 					return;
@@ -88,11 +88,6 @@ function providers(request, response) {
  					zipcodes += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
 				}
   				zipcodes += ")";
-
-				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write(zipcodes);
-				response.end();
-				return;
 			});
 		}).end();		
   	}
