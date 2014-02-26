@@ -70,6 +70,7 @@ function providers(request, response) {
 			res.on('end', function() {
 				calculate_distance=0;
 
+				//no data
   				if (!responsestring) {	
 					response.writeHead(200, {"Content-Type": "text/plain"}); 
 					response.write('error on zipcodedistanceapi');
@@ -77,16 +78,12 @@ function providers(request, response) {
 					return;
  				}
 
+		 		//translate json from string to array
 				var responsejson = JSON.parse(responsestring);
 				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("----end----"+responsejson.stringify());
+				response.write("----end----"+JSON.stringify(responsejson));
 				response.end();
 /*
- 		//translate json from string to array
- 		$responsejson = json_decode($responsestring,true);
- 		if (!$responsejson)	
- 			$this->response('unable to decode json',204); // "No Content" status
- 	
  		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
   		zipcodes += ")";
 
