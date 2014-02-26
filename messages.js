@@ -49,7 +49,7 @@ function providers(request, response) {
  		//lets get a few zipcodes
  		//var queryapi = "http://zipcodedistanceapi.redline13.com/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
  		var queryapi = "/rest/GFfN8AXLrdjnQN08Q073p9RK9BSBGcmnRBaZb8KCl40cR1kI1rMrBEbKg4mWgJk7/radius.json/" + zipcode + "/" + distance + "/mile";
-		var responsestring;
+		var responsestring="";
 
 		var options = {
   			host: "zipcodedistanceapi.redline13.com",
