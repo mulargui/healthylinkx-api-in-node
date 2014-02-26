@@ -80,23 +80,19 @@ function providers(request, response) {
 
 		 		//translate json from string to array
 				var responsejson = JSON.parse(responsestring);
-				response.writeHead(200, {"Content-Type": "text/plain"}); 
-				response.write("length:"+responsejson.zip_codes.length+ "----");
-				response.write("first:"+responsejson.zip_codes[0].zip_code+ "----");
-				response.write(JSON.stringify(responsejson));
-				response.end();
-/*
- 		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
-  		zipcodes += ")";
+				var length=responsejson.zip_codes.length;
 
- 		//lets prep a where condition for zip codes
- 		$count=count($responsejson['zip_codes']);
- 		zipcodes = "((Provider_Short_Postal_Code = '{$responsejson['zip_codes'][0]['zip_code']}')";
- 		zipcodes = "((Provider_Short_Postal_Code = '"+zipcode+"')";
- 		for ($i = 1; $i<$count; $i++)
- 			zipcodes += " OR (Provider_Short_Postal_Code = '{$responsejson['zip_codes'][$i]['zip_code']}')";
-  		zipcodes += ")";
-*/
+				//built the zipcodes subquery
+		 		zipcodes = "((Provider_Short_Postal_Code = '"+responsejson.zip_codes[0].zip_code+"')";
+				for (var i=0; i<length;i++){
+ 					zipcodes += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
+				}
+  				zipcodes += ")";
+
+				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.write(zipcodes);
+				response.end();
+				return;
 			});
 		}).end();		
   	}
