@@ -1,4 +1,5 @@
-var mysql=require("mysql");
+var mysql=require("/home/vagrant/node_modules/mysql");
+//var mysql=require("mysql");
 var url = require("url");
 var constants = require("./constants.js");
 
@@ -14,7 +15,8 @@ function taxonomy(request, response) {
 		if (err){
 			throw err;
 		}
-		response.writeHead(200, {"Content-Type": "text/plain"}); 
+		
+		response.writeHead(200, {"Content-Type": "application/json"}); 
 		response.write(JSON.stringify(results));
 		response.end();
 	});
@@ -73,7 +75,7 @@ function providers(request, response) {
 			if (err){
 				throw err;
 			}
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.writeHead(200, {"Content-Type": "application/json"}); 
 			response.write(JSON.stringify(results));
 			response.end();
 		});
@@ -129,7 +131,7 @@ function providers(request, response) {
 				if (err){
 					throw err;
 				}
-				response.writeHead(200, {"Content-Type": "text/plain"}); 
+				response.writeHead(200, {"Content-Type": "application/json"}); 
 				response.write(JSON.stringify(results));
 				response.end();
 			});
@@ -180,7 +182,7 @@ function transaction(request, response) {
 			if (err){
 				throw err;
 			}
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.writeHead(200, {"Content-Type": "application/json"}); 
 			response.write(JSON.stringify(results));
 			response.end();
 		});
@@ -209,7 +211,8 @@ function shortlist(request, response) {
 			throw err;
 		}
 
-		var reply=[{transaction: results.insertId}];
+		//keep the transaction number
+		var transactionid= results.insertId;
 			
 		//return detailed data of the selected providers
 		query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street, Provider_Full_City, Provider_Business_Practice_Location_Address_Telephone_Number FROM npidata2 WHERE ((NPI = '"+npi1+"')";
@@ -224,9 +227,10 @@ function shortlist(request, response) {
 				throw err;
 			}
 			
+			var reply=[{Transaction: transactionid}];
 			reply.push(results);
 			
-			response.writeHead(200, {"Content-Type": "text/plain"}); 
+			response.writeHead(200, {"Content-Type": "application/json"}); 
 			response.write(JSON.stringify(reply));
 			response.end();
 		});
