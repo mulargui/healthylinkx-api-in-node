@@ -1,24 +1,54 @@
-var mysql=require("/home/vagrant/node_modules/mysql");
-//var mysql=require("mysql");
+
+var mysql=require("mysql");
 var url = require("url");
 var constants = require("./constants.js");
+var dns = require('dns');
+var wait=require('wait.for');
 
-var db=mysql.createConnection({
-	host:constants.host,
-	user:constants.user,
-	password:constants.password,
-	database:constants.database
-});
+// a utility function to write header info
+function reply(response, code, results) {
+	response.writeHead(code, {"Content-Type": "application/json"}); 
+	response.write(JSON.stringify(results));
+	response.end();
+}
+
+/*
+function connectdb(){
+	var dbhost;
+	dns.lookup(constants.host, function(err,addresses){	
+		if (err) dbhost="127.0.0.1";
+		else dbhost= addresses;
+		db = mysql.createConnection({
+			host:dbhost,
+			user:constants.user,
+			password:constants.password,
+			database:constants.database
+		});
+	});
+}
+*/
+
+function connectdb(){
+	var dbhost;
+	try{
+		dbhost = wait.for(dns.lookup,constants.host);
+	} catch(err){
+		dbhost='127.0.0.1';
+	}
+
+	return mysql.createConnection({
+		host:dbhost,
+		user:constants.user,
+		password:constants.password,
+		database:constants.database
+	});
+}
 
 function taxonomy(request, response) {
+	var db=connectdb();
 	db.query("SELECT * FROM taxonomy", function(err,results,fields){		
-		if (err){
-			throw err;
-		}
-		
-		response.writeHead(200, {"Content-Type": "application/json"}); 
-		response.write(JSON.stringify(results));
-		response.end();
+		if (err) throw err;
+		reply(response, 200, results);
 	});
 }
 
@@ -35,13 +65,13 @@ function providers(request, response) {
  	
  	//check params
  	if(!zipcode && !lastname1 && !specialty){
-		response.writeHead(204, {"Content-Type": "text/plain"}); 
-		response.write('not enough parameters');
-		response.end();
+		reply(response, 204, '');
 		return;
  	}
 
-	//building the query string
+	//building the query
+	var db=connectdb();
+
  	var query = "SELECT NPI,Provider_Full_Name,Provider_Full_Street,Provider_Full_City FROM npidata2 WHERE (";
  	if(lastname1)
  		query += "((Provider_Last_Name_Legal_Name = '" + lastname1 + "')";
@@ -72,12 +102,8 @@ function providers(request, response) {
 		query += ") limit 50";
  		
 		db.query(query, function(err,results,fields){		
-			if (err){
-				throw err;
-			}
-			response.writeHead(200, {"Content-Type": "application/json"}); 
-			response.write(JSON.stringify(results));
-			response.end();
+			if (err) throw err;
+			reply(response, 200, results);
 		});
 		return;
 	}
@@ -107,9 +133,7 @@ function providers(request, response) {
 
 			//no data
   			if (!responsestring) {	
-				response.writeHead(204, {"Content-Type": "text/plain"}); 
-				response.write('error on zipcodedistanceapi');
-				response.end();
+				reply(response, 204, '');
 				return;
  			}
 
@@ -126,14 +150,10 @@ function providers(request, response) {
  				query += " OR (Provider_Short_Postal_Code = '"+ responsejson.zip_codes[i].zip_code +"')";
 			}
   			query += ")) limit 50";
-		
+
 			db.query(query, function(err,results,fields){		
-				if (err){
-					throw err;
-				}
-				response.writeHead(200, {"Content-Type": "application/json"}); 
-				response.write(JSON.stringify(results));
-				response.end();
+				if (err) throw err;
+				reply(response, 200, results);
 			});
 		});
 	}).end();		
@@ -145,23 +165,18 @@ function transaction(request, response) {
  
  	//check params
  	if(!id){
-		response.writeHead(204, {"Content-Type": "text/plain"}); 
-		response.write('no ID');
-		response.end();
+		reply(response, 204, '');
 		return;
  	}
 
 	//retrieve the providers
 	var query = "SELECT * FROM transactions WHERE (id = '"+id+"')";
- 	db.query(query, function(err,results,fields){		
-		if (err){
-			throw err;
-		}
+ 	var db=connectdb();
+	db.query(query, function(err,results,fields){		
+		if (err) throw err;
 
 		if (results.length <= 0){
-			response.writeHead(204, {"Content-Type": "text/plain"}); 
-			response.write('no ID records');
-			response.end();
+			reply(response, 204, '');
 			return;
  		}
 
@@ -179,12 +194,8 @@ function transaction(request, response) {
 		query += ")";
 
  		db.query(query, function(err,results,fields){		
-			if (err){
-				throw err;
-			}
-			response.writeHead(200, {"Content-Type": "application/json"}); 
-			response.write(JSON.stringify(results));
-			response.end();
+			if (err) throw err;
+			reply(response, 200, results);
 		});
 	});
 }
@@ -195,21 +206,17 @@ function shortlist(request, response) {
 	var npi2 = params.NPI2;
 	var npi3 = params.NPI3;
 
- 
  	//check params
  	if(!npi1){
-		response.writeHead(204, {"Content-Type": "text/plain"}); 
-		response.write('no NPI');
-		response.end();
+		reply(response, 204, '');
 		return;
  	}
 	
 	//save the selection
 	var query = "INSERT INTO transactions VALUES (DEFAULT,DEFAULT,'"+ npi1 +"','"+ npi2 +"','"+npi3 +"')";
+	var db=connectdb();
  	db.query(query, function(err,results,fields){		
-		if (err){
-			throw err;
-		}
+		if (err) throw err;
 
 		//keep the transaction number
 		var transactionid= results.insertId;
@@ -223,16 +230,11 @@ function shortlist(request, response) {
 		query += ")";
 
  		db.query(query, function(err,results,fields){		
-			if (err){
-				throw err;
-			}
+			if (err) throw err;
 			
-			var reply=[{Transaction: transactionid}];
-			reply.push(results);
-			
-			response.writeHead(200, {"Content-Type": "application/json"}); 
-			response.write(JSON.stringify(reply));
-			response.end();
+			var info=[{Transaction: transactionid}];
+			info.push(results);
+			reply(response, 200, info);
 		});
 	});
 }

@@ -1,4 +1,4 @@
-var host='127.0.0.1';
+var host='MySQLDB';
 var user='root';
 var password='awsawsdb';
 var database='healthylinkx';

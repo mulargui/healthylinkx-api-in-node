@@ -1,3 +1,7 @@
+
+var http = require("http"); 
+var url = require("url");
+var wait = require('wait.for');
 var messages = require("./messages"); 
 
 var handle = {}
@@ -5,9 +9,6 @@ handle["/taxonomy"] = messages.taxonomy;
 handle["/providers"] = messages.providers;
 handle["/shortlist"] = messages.shortlist;
 handle["/transaction"] = messages.transaction;
-
-var http = require("http"); 
-var url = require("url");
 
 http.createServer(function (request, response) {
 	//only GET queries
@@ -24,7 +25,9 @@ http.createServer(function (request, response) {
 		//allow cross domain requests
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		
-		handle[pathname](request, response); 
+		//adding support for sync calls
+		wait.launchFiber(handle[pathname],request,response);
+		//handle[pathname](request, response); 
 	} else {
 		response.writeHead(404, {"Content-Type": "text/plain"});
 		response.write("404 Not found");
