@@ -10,6 +10,7 @@ function reply(response, code, results) {
 	response.writeHead(code, {"Content-Type": "application/json"}); 
 	response.write(JSON.stringify(results));
 	response.end();
+	console.log("%d", code);
 }
 
 /*

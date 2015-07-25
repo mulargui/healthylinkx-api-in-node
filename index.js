@@ -11,11 +11,13 @@ handle["/shortlist"] = messages.shortlist;
 handle["/transaction"] = messages.transaction;
 
 http.createServer(function (request, response) {
+	console.log(request.url);	
 	//only GET queries
 	if (request.method != 'GET'){
 		response.writeHead(406, {"Content-Type": "text/plain"});
 		response.write("406 Not Acceptable");
 		response.end();
+		console.log("406");
 		return;
 	}
 
@@ -32,6 +34,7 @@ http.createServer(function (request, response) {
 		response.writeHead(404, {"Content-Type": "text/plain"});
 		response.write("404 Not found");
 		response.end();
+		console.log("404");
 	} 
 }).listen(8081);
 
