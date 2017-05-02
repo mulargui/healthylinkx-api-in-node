@@ -1,6 +1,6 @@
 var host='MySQLDB';
-var user='root';
-var password='awsawsdb';
+var user='XXXXXXXXXXXXXX';
+var password='YYYYYYYYYYYYYYYY';
 var database='healthylinkx';
 
 exports.host=host;
