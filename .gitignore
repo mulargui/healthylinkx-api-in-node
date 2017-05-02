@@ -1,1 +1,4 @@
 node_modules/
+
+#sensible data
+constants.js
