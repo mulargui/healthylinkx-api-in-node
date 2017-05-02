@@ -1,4 +1,4 @@
 node_modules/
 
 #sensible data
-#constants.js
+constants.js
