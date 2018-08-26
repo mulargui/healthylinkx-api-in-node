@@ -24,5 +24,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.network "forwarded_port", guest: 8081,  host: 8081 
 
 	# provisioning using a shell script (including docker)
-	config.vm.provision "os", type: "shell", path: "./infrastructure/setup.sh", args: "ALL"
+	config.vm.provision "os", type: "shell", path: "./vm/setup.sh", args: "ALL"
 end

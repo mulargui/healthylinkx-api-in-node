@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthylinkx-api-deployment
+  labels:
+    app: healthylinkx-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: healthylinkx-api
+  template:
+    metadata:
+      labels:
+        app: healthylinkx-api
+    spec:        
+      containers:
+      - name: healthylinkx-api
+        image: nodejs
+        imagePullPolicy: Never 
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - name: myapp
+          mountPath: /myapp
+      volumes:
+      - name: myapp
+        hostPath:
+          path: /c/Users/mulargui/cluster/healthylinkx-api-in-node
+          type: Directory
+     

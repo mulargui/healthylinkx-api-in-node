@@ -49,7 +49,7 @@ fi
 if [ "${BUILD}" == "Y" ]; then
 	./$0 CLEAR
 	./$0 CLEANUP
-	sudo docker build --rm=true -t nodejs $REPOPATH/infrastructure
+	sudo docker build --rm=true -t nodejs $REPOPATH/docker
 fi
 
 # run the container in the background
