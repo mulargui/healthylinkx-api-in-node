@@ -49,7 +49,7 @@ fi
 if [ "${BUILD}" == "Y" ]; then
 	./$0 CLEAR
 	./$0 CLEANUP
-	sudo docker build --rm=true -t nodejs $REPOPATH/infrastructure
+	sudo docker build --rm=true -t nodejs $REPOPATH/docker
 fi
 
 # run the container in the background
@@ -58,7 +58,7 @@ if [ "${RUN}" == "Y" ]; then
 	if [ "$(sudo docker images | grep nodejs)" == "" ]; then
 		./$0 BUILD
 	fi
-	sudo docker run -d  --name NODEJSAPI -p 8081:8081 -v $REPOPATH:/myapp --link MySQLDB:MySQLDB nodejs 
+	sudo docker run -d  --name NODEJSAPI -p 8081:8081 -v $REPOPATH/src:/myapp --link MySQLDB:MySQLDB nodejs 
 fi
 
 # run the container in the console
@@ -67,5 +67,5 @@ if [ "${INTERACTIVE}" == "Y" ]; then
 	if [ "$(sudo docker images | grep nodejs)" == "" ]; then
 		./$0 BUILD
 	fi
-	sudo docker run -ti --name NODEJSAPI -p 8081:8081 -v $REPOPATH:/myapp --link MySQLDB:MySQLDB nodejs /bin/bash
+	sudo docker run -ti --name NODEJSAPI -p 8081:8081 -v $REPOPATH/src:/myapp --link MySQLDB:MySQLDB nodejs /bin/bash
 fi

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: healthylinkx-api-pod
+spec:
+ containers:
+ - name: healthylinkx-api
+   image: nodejs
+   imagePullPolicy: Never 
+   ports:
+   - containerPort: 8081
+   env:
+   volumeMounts:
+     - name: myapp
+       mountPath: /myapp
+ restartPolicy: OnFailure
+ volumes:
+ - name: myapp
+   hostPath:
+     path: /c/Users/mulargui/cluster/healthylinkx-api-in-node/src
+     type: Directory
