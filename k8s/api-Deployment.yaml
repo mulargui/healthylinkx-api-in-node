@@ -26,6 +26,6 @@ spec:
       volumes:
       - name: myapp
         hostPath:
-          path: /c/Users/mulargui/cluster/healthylinkx-api-in-node/src
+          path: /home/docker/healthylinkx-api-in-node/src
           type: Directory
      

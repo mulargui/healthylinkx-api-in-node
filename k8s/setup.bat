@@ -1,15 +1,12 @@
 
-rem cleanup previous instalations
-kubectl delete services healthylinkx-api-service
-kubectl delete deployments healthylinkx-api-deployment
-
-IF "%1"=="CLEAN" exit /B 0
+rem edit this if you cloned the repo in a different directory
+minikube ssh "ln -s /c/Users/Mauricio/Documents/healthylinkx-api-in-node /home/docker/healthylinkx-api-in-node"
 
 rem create the containers
-minikube ssh /c/Users/mulargui/cluster/healthylinkx-api-in-node/docker/container.sh BUILD
+minikube ssh "/home/docker/healthylinkx-api-in-node/docker/container.sh BUILD"
 
-rem create new resources
-kubectl create -f %userprofile%/cluster/healthylinkx-api-in-node/k8s/api-service.yaml
-kubectl create -f %userprofile%/cluster/healthylinkx-api-in-node/k8s/api-deployment.yaml
+rem create resources
+kubectl create -f %~dp0.\api-service.yaml
+kubectl create -f %~dp0.\api-deployment.yaml
 
 exit /B 0
